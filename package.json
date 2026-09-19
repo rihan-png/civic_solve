@@ -1,7 +1,15 @@
 {
   "name": "civicsolve2.5",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.5.0",
+  "description": "Geospatial Civic Problem-Solving Platform · Government of India & Smart Cities Mission",
+  "homepage": "https://rihan-png.github.io/civic_solve/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rihan-png/civic_solve.git"
+  },
+  "author": "rihan-png",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

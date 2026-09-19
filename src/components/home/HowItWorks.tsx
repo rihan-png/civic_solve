@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  FileEdit, 
-  Cpu, 
-  CheckCircle2, 
-  BarChart3, 
-  Users2, 
+import {
+  FileEdit,
+  Cpu,
+  CheckCircle2,
+  BarChart3,
+  Users2,
   Award,
   ArrowRight
 } from 'lucide-react';
@@ -26,7 +26,7 @@ export const HowItWorks: React.FC = () => {
       sampleOutput: {
         type: 'Citizen Voice Submission',
         content: '"Road mein bahut bade potholes hain, bachho ki auto palatne ka khatra hai."',
-        metadata: 'Ward 36, Pune Region | GPS: 18.6279° N, 73.8009° E'
+        metadata: 'Ward 21, Ranchi (Jharkhand) | GPS: 23.3569° N, 85.3240° E'
       }
     },
     {
@@ -81,7 +81,7 @@ export const HowItWorks: React.FC = () => {
       aiRole: 'Semantic matching between challenge specs and university department labs, DST incubators, and student skill vectors.',
       sampleOutput: {
         type: 'Smart Routing Dispatch',
-        content: 'Matched with COEP Tech & PCMC Field Squad + Swachh Community Lead.',
+        content: 'Matched with BIT Mesra & Ranchi Municipal PWD Squad + Vikas Bharti Lead.',
         metadata: 'Route Type: Collaborative Innovation | Team: 4 Students + 1 Lead'
       }
     },
@@ -124,20 +124,17 @@ export const HowItWorks: React.FC = () => {
               <button
                 key={stage.id}
                 onClick={() => setActiveStage(idx)}
-                className={`flex flex-col items-center p-2 sm:p-3 rounded-xl border text-center transition-all cursor-pointer ${
-                  isSelected
+                className={`flex flex-col items-center p-2 sm:p-3 rounded-xl border text-center transition-all cursor-pointer ${isSelected
                     ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm scale-102'
                     : 'bg-white/80 border-[#CBD7C6] text-[#4F6255] hover:bg-white hover:text-[#143D2B]'
-                }`}
+                  }`}
               >
-                <span className={`text-[10px] font-extrabold tracking-wider mb-1 ${
-                  isSelected ? 'text-emerald-300' : 'text-[#7B8F82]'
-                }`}>
+                <span className={`text-[10px] font-extrabold tracking-wider mb-1 ${isSelected ? 'text-emerald-300' : 'text-[#7B8F82]'
+                  }`}>
                   STAGE {stage.step}
                 </span>
-                <div className={`p-2 rounded-lg mb-1.5 ${
-                  isSelected ? 'bg-emerald-950 text-white' : 'bg-[#EBF1E8] text-[#143D2B]'
-                }`}>
+                <div className={`p-2 rounded-lg mb-1.5 ${isSelected ? 'bg-emerald-950 text-white' : 'bg-[#EBF1E8] text-[#143D2B]'
+                  }`}>
                   {stage.icon}
                 </div>
                 <span className="text-xs font-bold leading-tight">{stage.title}</span>
@@ -149,7 +146,7 @@ export const HowItWorks: React.FC = () => {
         {/* Active Stage Detailed Card */}
         <div className="bg-white rounded-2xl border border-[#CBD7C6] p-6 sm:p-8 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
+
             <div className="lg:col-span-7 space-y-4">
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-bold text-white bg-[#143D2B] px-2.5 py-0.5 rounded-full uppercase tracking-wider">

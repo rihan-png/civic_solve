@@ -1,7 +1,5 @@
 import React from 'react';
 import { AppStateProvider, useAppState } from './context/AppStateContext';
-import { CopilotProvider, useCopilot } from './context/CopilotContext';
-import { GovernmentBanner } from './components/layout/GovernmentBanner';
 import { Navbar } from './components/layout/Navbar';
 import { AndroidBottomNav } from './components/layout/AndroidBottomNav';
 import { Footer } from './components/layout/Footer';
@@ -24,12 +22,9 @@ import { ReportWizardModal } from './components/citizen/ReportWizardModal';
 import { CitizenPortal } from './components/citizen/CitizenPortal';
 import { AuthModal } from './components/auth/AuthModal';
 import { AIEngineModal } from './components/ai-engine/AIEngineModal';
-import { AICopilotDrawer } from './components/copilot/AICopilotDrawer';
-import { Sparkles } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const { currentView } = useAppState();
-  const { setIsOpen: setCopilotOpen } = useCopilot();
 
   const renderViewContent = () => (
     <>
@@ -61,9 +56,6 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F4F6F0] font-sans text-[#18241D]">
-      {/* Government of India Top Banner */}
-      <GovernmentBanner />
-
       {/* Main CivicSolve Navbar */}
       <Navbar />
 
@@ -78,22 +70,10 @@ const AppContent: React.FC = () => {
       {/* Footer */}
       <Footer />
 
-      {/* Global Modals & Drawers */}
+      {/* Global Modals & Engine Inspection */}
       <ReportWizardModal />
       <AuthModal />
       <AIEngineModal />
-      <AICopilotDrawer />
-
-      {/* Floating AI Copilot Button */}
-      <button
-        onClick={() => setCopilotOpen(true)}
-        className="fixed bottom-20 md:bottom-6 right-5 z-40 bg-[#143D2B] hover:bg-[#1B4D36] text-white font-bold px-4 py-3 rounded-full shadow-2xl flex items-center space-x-2 transition-all hover:scale-105 cursor-pointer border border-emerald-400/30"
-        title="Open CivicSolve Intelligence AI Copilot"
-        aria-label="Open AI Copilot"
-      >
-        <Sparkles className="w-5 h-5 text-amber-300" />
-        <span className="text-xs font-bold uppercase tracking-wider hidden sm:inline">AI Copilot</span>
-      </button>
     </div>
   );
 };
@@ -101,9 +81,7 @@ const AppContent: React.FC = () => {
 export default function App() {
   return (
     <AppStateProvider>
-      <CopilotProvider>
-        <AppContent />
-      </CopilotProvider>
+      <AppContent />
     </AppStateProvider>
   );
 }

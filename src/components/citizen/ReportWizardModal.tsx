@@ -1,15 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { 
-  X, 
-  ArrowRight, 
-  ArrowLeft, 
-  MapPin, 
-  Camera, 
-  Upload, 
-  AlertTriangle, 
-  CheckCircle2, 
-  Sparkles, 
-  FileText, 
+import {
+  X,
+  ArrowRight,
+  ArrowLeft,
+  MapPin,
+  Camera,
+  Upload,
+  AlertTriangle,
+  CheckCircle2,
+  Sparkles,
+  FileText,
   Users,
   ShieldCheck,
   Cpu,
@@ -34,48 +34,48 @@ interface GeotaggedPreset {
 
 const PRESET_GEOTAGGED_PHOTOS: GeotaggedPreset[] = [
   {
-    label: 'Pimpri Old Mumbai Hwy',
-    roadName: 'Old Mumbai-Pune Highway, Morwadi Chowk',
-    district: 'Pimpri-Chinchwad',
-    lat: 18.6279,
-    lng: 73.8009,
+    label: 'Ranchi Main Road Overbridge',
+    roadName: 'Mahatma Gandhi Marg near Sujata Chowk, Ward 21',
+    district: 'Ranchi',
+    lat: 23.3569,
+    lng: 85.3240,
     depthCm: 22,
     url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
     timestamp: '19-Sep-2026, 16:15 IST',
-    cameraInfo: 'Geotagged Android Cam · ±2.4m GPS'
+    cameraInfo: 'Geotagged Android Cam · ±2.4m GPS (Ranchi)'
   },
   {
-    label: 'Hinjawadi IT Corridor',
-    roadName: 'Rajiv Gandhi Infotech Park Phase 1, Shivaji Chowk',
-    district: 'Hinjawadi / Wakad',
-    lat: 18.5913,
-    lng: 73.7389,
+    label: 'Harmu Bypass Road, Ranchi',
+    roadName: 'Harmu Housing Colony near Sahjanand Chowk, Ward 26',
+    district: 'Ranchi',
+    lat: 23.3625,
+    lng: 85.3090,
     depthCm: 19,
     url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
     timestamp: '19-Sep-2026, 15:40 IST',
-    cameraInfo: 'EXIF Validated · ±3.1m GPS'
+    cameraInfo: 'EXIF Validated · ±3.1m GPS (Ranchi)'
   },
   {
-    label: 'Wagholi Main Chowk',
-    roadName: 'Pune-Ahmednagar Highway near Overbridge',
-    district: 'Pune East Corridor',
-    lat: 18.5793,
-    lng: 73.9822,
+    label: 'Bistupur Boulevard, Jamshedpur',
+    roadName: 'Inner Circle Road near Gopal Maidan',
+    district: 'East Singhbhum (Jamshedpur)',
+    lat: 22.7925,
+    lng: 86.1770,
     depthCm: 14,
     url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
     timestamp: '19-Sep-2026, 14:10 IST',
-    cameraInfo: 'Civic Field Cam · ±1.9m GPS'
+    cameraInfo: 'Civic Field Cam · ±1.9m GPS (Jamshedpur)'
   },
   {
-    label: 'Sinhagad Rd / Dhayari',
-    roadName: 'Sinhagad Road at Dhayari Flyover descent',
-    district: 'Pune South',
-    lat: 18.4485,
-    lng: 73.8188,
+    label: 'Bank More Station Hub, Dhanbad',
+    roadName: 'Dhanbad Station South Approach Road, Ward 14',
+    district: 'Dhanbad',
+    lat: 23.7920,
+    lng: 86.4300,
     depthCm: 16,
     url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=800&q=80',
     timestamp: '19-Sep-2026, 12:35 IST',
-    cameraInfo: 'Geotagged Field Cam · ±2.6m GPS'
+    cameraInfo: 'Geotagged Field Cam · ±2.6m GPS (Dhanbad)'
   }
 ];
 
@@ -89,10 +89,10 @@ export const ReportWizardModal: React.FC = () => {
     description: 'Main road par school gate ke paas bahut bada pothole hai, auto aur bikes girne ka khatra hai aur baarish mein paani bhar jaata hai.',
     category: 'Road & Infrastructure' as ChallengeCategory,
     subcategory: 'Pavement Structural Failure & Deep Potholes',
-    district: 'Pimpri-Chinchwad',
-    villageOrWard: 'Ward 14, Morwadi / Old Highway',
-    lat: 18.6279,
-    lng: 73.8009,
+    district: 'Ranchi',
+    villageOrWard: 'Ward 21, Mahatma Gandhi Marg / Overbridge',
+    lat: 23.3569,
+    lng: 85.3240,
     photoUrl: PRESET_GEOTAGGED_PHOTOS[0].url,
     photoTimestamp: PRESET_GEOTAGGED_PHOTOS[0].timestamp,
     photoCameraInfo: PRESET_GEOTAGGED_PHOTOS[0].cameraInfo,
@@ -120,14 +120,16 @@ export const ReportWizardModal: React.FC = () => {
   ];
 
   const districts = [
-    'Pimpri-Chinchwad',
-    'Pune Urban Belt',
-    'Hinjawadi / Wakad',
-    'Chakan Industrial Belt',
-    'Mumbai Suburban',
-    'Thane Municipal Corp',
     'Ranchi',
+    'East Singhbhum (Jamshedpur)',
     'Dhanbad',
+    'Bokaro',
+    'Hazaribagh',
+    'Deoghar',
+    'Giridih',
+    'Palamu',
+    'Ramgarh',
+    'West Singhbhum',
     'Other Urban Local Body'
   ];
 
@@ -153,7 +155,7 @@ export const ReportWizardModal: React.FC = () => {
         const result = uploadEvent.target?.result as string;
         const now = new Date();
         const formattedDate = `${now.getDate()}-Sep-2026, ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} IST`;
-        
+
         setFormData(prev => ({
           ...prev,
           photoUrl: result,
@@ -219,7 +221,7 @@ export const ReportWizardModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
       <div className="bg-[#F4F6F0] border border-[#CBD7C6] rounded-2xl w-full max-w-2xl text-[#18241D] shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh] animate-fadeIn">
-        
+
         {/* Modal Header */}
         <div className="px-5 py-3.5 border-b border-[#CBD7C6] flex justify-between items-center bg-[#143D2B] text-white">
           <div className="flex items-center space-x-2.5">
@@ -231,8 +233,8 @@ export const ReportWizardModal: React.FC = () => {
               <p className="text-[11px] text-emerald-200">
                 Step {step} of 4 — {
                   step === 1 ? 'Problem Identification' :
-                  step === 2 ? 'Geotagged Multi-Modal Evidence' :
-                  step === 3 ? 'Societal & Hazard Impact' : 'AI Review & Geospatial Triage'
+                    step === 2 ? 'Geotagged Multi-Modal Evidence' :
+                      step === 3 ? 'Societal & Hazard Impact' : 'AI Review & Geospatial Triage'
                 }
               </p>
             </div>
@@ -258,11 +260,10 @@ export const ReportWizardModal: React.FC = () => {
             <button
               key={s.num}
               onClick={() => setStep(s.num)}
-              className={`py-1 transition-all cursor-pointer ${
-                step === s.num
+              className={`py-1 transition-all cursor-pointer ${step === s.num
                   ? 'text-[#143D2B] font-bold border-b-2 border-[#143D2B]'
                   : 'text-[#6C7E72] hover:text-[#143D2B]'
-              }`}
+                }`}
             >
               {s.label}
             </button>
@@ -271,7 +272,7 @@ export const ReportWizardModal: React.FC = () => {
 
         {/* Modal Form Body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
-          
+
           {/* STEP 1: Problem Identification */}
           {step === 1 && (
             <div className="space-y-3.5">
@@ -344,7 +345,7 @@ export const ReportWizardModal: React.FC = () => {
                     value={formData.villageOrWard}
                     onChange={(e) => setFormData({ ...formData, villageOrWard: e.target.value })}
                     className="w-full bg-white border border-[#CBD7C6] rounded-lg px-3 py-2 text-xs sm:text-sm text-[#14261C] focus:outline-none focus:ring-2 focus:ring-[#143D2B]/30"
-                    placeholder="e.g. Old Mumbai-Pune Hwy, Morwadi"
+                    placeholder="e.g. Mahatma Gandhi Marg, Ward 21, Ranchi"
                     required
                   />
                 </div>
@@ -388,7 +389,7 @@ export const ReportWizardModal: React.FC = () => {
           {/* STEP 2: Geotagged Evidence & Image Format with Geotag Overlay */}
           {step === 2 && (
             <div className="space-y-3.5">
-              
+
               {/* Clean Detailed Problem Description */}
               <div>
                 <div className="flex items-center justify-between mb-1">
@@ -470,7 +471,7 @@ export const ReportWizardModal: React.FC = () => {
 
                   {/* Official Geotag Watermark Overlay (Standard Indian Civic Geo-Camera Stamp) */}
                   <div className="absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-md p-3 text-white text-left font-mono border-t border-white/20 select-none">
-                    
+
                     {/* Top Row: Coordinates & Timestamp */}
                     <div className="flex flex-wrap items-center justify-between text-[11px] sm:text-xs text-amber-300 font-bold pb-1 border-b border-white/15 gap-1">
                       <div className="flex items-center space-x-1.5">
@@ -574,11 +575,10 @@ export const ReportWizardModal: React.FC = () => {
                         key={idx}
                         type="button"
                         onClick={() => handleSelectPresetPhoto(p)}
-                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                          formData.photoUrl === p.url
+                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${formData.photoUrl === p.url
                             ? 'bg-[#EBF1E8] border-[#143D2B] ring-2 ring-[#143D2B]/30 shadow-sm'
                             : 'bg-[#F9FBF8] border-[#CBD7C6] hover:bg-white text-[#4E6155]'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[10px] font-bold text-[#143D2B] block truncate">
@@ -616,11 +616,10 @@ export const ReportWizardModal: React.FC = () => {
                       key={num}
                       type="button"
                       onClick={() => setFormData({ ...formData, affectedPopulation: num })}
-                      className={`py-2 px-1 text-center rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
-                        formData.affectedPopulation === num 
-                          ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm' 
+                      className={`py-2 px-1 text-center rounded-lg border text-xs font-bold transition-colors cursor-pointer ${formData.affectedPopulation === num
+                          ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm'
                           : 'bg-white text-[#2C3E33] border-[#CBD7C6] hover:bg-[#F0F5EE]'
-                      }`}
+                        }`}
                     >
                       {num === 5000 ? '5,000+' : `~${num}`}
                     </button>
@@ -642,11 +641,10 @@ export const ReportWizardModal: React.FC = () => {
                       key={risk.level}
                       type="button"
                       onClick={() => setFormData({ ...formData, safetyRisk: risk.level })}
-                      className={`p-2.5 rounded-lg border text-left transition-colors cursor-pointer ${
-                        formData.safetyRisk === risk.level 
-                          ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm' 
+                      className={`p-2.5 rounded-lg border text-left transition-colors cursor-pointer ${formData.safetyRisk === risk.level
+                          ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm'
                           : 'bg-white text-[#2C3E33] border-[#CBD7C6] hover:bg-[#F0F5EE]'
-                      }`}
+                        }`}
                     >
                       <span className="text-xs font-bold block">{risk.level}</span>
                       <span className={`text-[10px] block mt-0.5 ${formData.safetyRisk === risk.level ? 'text-emerald-200' : 'text-[#6C7E72]'}`}>

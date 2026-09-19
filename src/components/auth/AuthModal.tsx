@@ -101,7 +101,7 @@ const ROLE_PROFILES: RoleAuthProfile[] = [
     name: 'Sunil Kumar Soren',
     email: 'citizen@civicsolve.in',
     demoPassword: 'Citizen@2026#Track',
-    organization: 'Resident, Ward 36, Doranda / PCMC Local Area',
+    organization: 'Resident, Ward 36, Doranda, Ranchi (Jharkhand)',
     badge: 'Verified Resident (Jan Parichay)',
     badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     description: 'Track municipal repair progress in real-time, inspect verified before/after geotag evidence, and submit quality feedback.'

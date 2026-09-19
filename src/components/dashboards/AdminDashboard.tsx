@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { 
-  ShieldAlert, 
-  Cpu, 
-  Users, 
-  Layers, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Sliders, 
-  RefreshCw, 
+import {
+  ShieldAlert,
+  Cpu,
+  Users,
+  Layers,
+  CheckCircle2,
+  AlertTriangle,
+  Sliders,
+  RefreshCw,
   RotateCcw,
   Check,
-  X
+  X,
+  MapPin,
+  Camera,
+  Clock,
+  Wrench,
+  Sparkles
 } from 'lucide-react';
 import { useAppState } from '../../context/AppStateContext';
 
 export const AdminDashboard: React.FC = () => {
-  const { challenges, incidentClusters } = useAppState();
+  const { challenges, incidentClusters, updateChallengeStatus } = useAppState();
   const [aiOverrideLogs, setAiOverrideLogs] = useState([
     { id: 'ov-1', challengeId: 'CIV-2026-0562', original: 'MEDIUM', overridden: 'CRITICAL', officer: 'Director Admin (JSPCB)', reason: 'Upstream proximity to drinking intake overlooked by geo-buffer', date: '2026-09-09' }
   ]);
@@ -39,7 +44,7 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="bg-slate-900 text-slate-100 min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        
+
         {/* Header Banner */}
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center space-x-3.5">
@@ -72,6 +77,105 @@ export const AdminDashboard: React.FC = () => {
             <span>{overrideNotice}</span>
           </div>
         )}
+
+        {/* Real-time Incoming Citizen Grievances & Work Orders Queue */}
+        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>Incoming Citizen Grievances & Work Orders Queue</span>
+                </h3>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/40">
+                  Jharkhand Municipal Grievance Flow
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                New reports filed by verified citizens in Jharkhand districts. Triage, assign municipal repair squads, or mark completed.
+              </p>
+            </div>
+            <span className="text-xs bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1 rounded-full font-mono font-semibold">
+              {challenges.length} Total Registered in State
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {challenges.slice(0, 6).map((ch) => (
+              <div key={ch.id} className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between space-y-3 hover:border-slate-700 transition-colors">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[10px]">
+                    <span className="font-mono text-cyan-400 font-bold">{ch.id}</span>
+                    <span className={`px-2 py-0.5 rounded font-bold uppercase tracking-wider ${
+                      ch.status === 'resolved' || ch.status === 'impact_verified'
+                        ? 'bg-emerald-900/60 text-emerald-300 border border-emerald-700'
+                        : ch.status === 'assigned' || ch.status === 'in_development'
+                        ? 'bg-amber-900/60 text-amber-300 border border-amber-700'
+                        : 'bg-rose-900/60 text-rose-300 border border-rose-700'
+                    }`}>
+                      {ch.status === 'in_development' ? 'In Repair' : ch.status}
+                    </span>
+                  </div>
+
+                  {ch.evidence?.photos?.[0]?.url && (
+                    <div className="relative h-32 rounded-lg overflow-hidden border border-slate-800 bg-slate-950">
+                      <img
+                        src={ch.evidence.photos[0].url}
+                        alt={ch.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute bottom-1 left-1 bg-black/80 backdrop-blur-xs text-[9px] text-white px-2 py-0.5 rounded font-mono">
+                        📍 {ch.coordinates.lat.toFixed(4)}°N, {ch.coordinates.lng.toFixed(4)}°E
+                      </div>
+                    </div>
+                  )}
+
+                  <h4 className="text-xs font-bold text-white leading-snug line-clamp-2">
+                    {ch.title}
+                  </h4>
+
+                  <p className="text-[11px] text-slate-400 line-clamp-2">
+                    {ch.description}
+                  </p>
+
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+                    <span className="flex items-center space-x-1 truncate max-w-[180px]">
+                      <MapPin className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+                      <span className="truncate">{ch.villageOrWard}, {ch.district}</span>
+                    </span>
+                    <span className="text-emerald-400 font-semibold flex-shrink-0">
+                      AI: {ch.aiAnalysis?.confidenceScore || 92}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Direct Action Dispatch Buttons */}
+                <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-1.5 text-[10px]">
+                  <button
+                    onClick={() => {
+                      updateChallengeStatus(ch.id, 'assigned', `${ch.district} PWD Rapid Asphalt Squad`, `Dispatched municipal bitumen repair crew to ${ch.villageOrWard}.`);
+                      setOverrideNotice(`Dispatched repair squad to ${ch.id} (${ch.villageOrWard}, ${ch.district}).`);
+                      setTimeout(() => setOverrideNotice(null), 4000);
+                    }}
+                    className="flex-1 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-600/40 py-1.5 px-1 rounded font-medium text-center transition-colors cursor-pointer"
+                  >
+                    Dispatch Crew
+                  </button>
+                  <button
+                    onClick={() => {
+                      updateChallengeStatus(ch.id, 'resolved', undefined, `Marked ${ch.id} resolved and verified via municipal engineering inspection.`);
+                      setOverrideNotice(`Marked ${ch.id} as Resolved & Verified.`);
+                      setTimeout(() => setOverrideNotice(null), 4000);
+                    }}
+                    className="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-600/40 py-1.5 px-1 rounded font-medium text-center transition-colors cursor-pointer"
+                  >
+                    Mark Resolved
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* AI Decision Oversight & Human Overrides */}
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-4">
@@ -106,9 +210,8 @@ export const AdminDashboard: React.FC = () => {
                     <td className="py-3 px-3">{ch.category}</td>
                     <td className="py-3 px-3 font-semibold text-emerald-400">{ch.aiAnalysis.confidenceScore}%</td>
                     <td className="py-3 px-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        ch.priority === 'CRITICAL' ? 'bg-rose-900/50 text-rose-300' : 'bg-amber-900/50 text-amber-300'
-                      }`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${ch.priority === 'CRITICAL' ? 'bg-rose-900/50 text-rose-300' : 'bg-amber-900/50 text-amber-300'
+                        }`}>
                         {ch.priority}
                       </span>
                     </td>

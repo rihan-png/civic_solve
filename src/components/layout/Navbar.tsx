@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { 
-  ArrowRight, 
-  Bell, 
-  Menu, 
-  X, 
-  PlusCircle, 
-  Building2, 
-  HeartHandshake, 
-  GraduationCap, 
-  FileQuestion, 
+import {
+  ArrowRight,
+  Bell,
+  Menu,
+  X,
+  PlusCircle,
+  Building2,
+  HeartHandshake,
+  GraduationCap,
+  FileQuestion,
   MapPin,
   Lock,
   LogOut,
@@ -19,13 +19,13 @@ import { useAppState, type AppView } from '../../context/AppStateContext';
 import type { UserRole } from '../../types';
 
 export const Navbar: React.FC = () => {
-  const { 
-    currentView, 
-    setCurrentView, 
-    activeRole, 
-    setActiveRole, 
-    setIsReportModalOpen, 
-    notifications, 
+  const {
+    currentView,
+    setCurrentView,
+    activeRole,
+    setActiveRole,
+    setIsReportModalOpen,
+    notifications,
     markNotificationAsRead,
     setSelectedChallenge,
     challenges,
@@ -58,10 +58,10 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-40 bg-[#F4F6F0]/95 backdrop-blur-md border-b border-[#D8E2D5] transition-all">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          
+
           {/* Brand Logo matching screenshot */}
           <div className="flex items-center space-x-2">
-            <button 
+            <button
               onClick={() => handleNavClick('home')}
               className="flex items-center space-x-2 group cursor-pointer focus:outline-none"
               title="CivicSolve Home"
@@ -79,18 +79,16 @@ export const Navbar: React.FC = () => {
           <nav className="hidden lg:flex items-center space-x-3 xl:space-x-4 text-sm font-medium text-[#2C3E33]">
             <button
               onClick={() => handleNavClick('how-it-works')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer ${
-                currentView === 'how-it-works' ? 'text-[#143D2B] font-bold underline underline-offset-4 decoration-[#143D2B]' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer ${currentView === 'how-it-works' ? 'text-[#143D2B] font-bold underline underline-offset-4 decoration-[#143D2B]' : ''
+                }`}
             >
               How it works
             </button>
 
             <button
               onClick={() => handleNavClick('citizen-portal')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${
-                currentView === 'citizen-portal' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${currentView === 'citizen-portal' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
+                }`}
               title="Citizen Progress Tracker & Verification Feedback"
             >
               <span>🇮🇳</span>
@@ -99,9 +97,8 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => handleRoleSelect('admin', 'admin-dashboard')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${
-                currentView === 'admin-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${currentView === 'admin-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
+                }`}
               title="Municipal Admin & AI Governance Portal"
             >
               <span>🏛️</span>
@@ -110,9 +107,8 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => handleRoleSelect('ngo', 'ngo-dashboard')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${
-                currentView === 'ngo-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${currentView === 'ngo-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
+                }`}
               title="NGO & Grassroots Civil Society Portal"
             >
               <span>🤝</span>
@@ -121,9 +117,8 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => handleRoleSelect('university', 'university-workspace')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${
-                currentView === 'university-workspace' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${currentView === 'university-workspace' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
+                }`}
               title="University & Academic Research Workspace"
             >
               <span>🎓</span>
@@ -132,9 +127,8 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => handleRoleSelect('industry', 'industry-dashboard')}
-              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${
-                currentView === 'industry-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
-              }`}
+              className={`hover:text-[#143D2B] transition-colors cursor-pointer flex items-center space-x-1.5 px-2.5 py-1 rounded-lg ${currentView === 'industry-dashboard' ? 'bg-[#E0E9DD] text-[#143D2B] font-bold' : ''
+                }`}
               title="Industry, Startup & Corporate CSR Hub"
             >
               <span>🏭</span>
@@ -144,7 +138,7 @@ export const Navbar: React.FC = () => {
 
           {/* Right Actions: Desktop View Toggle, Notifications, Report, Sign In, Hamburger */}
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            
+
 
 
             {/* Quick Report CTA on Mobile / Tablet */}
@@ -307,12 +301,11 @@ export const Navbar: React.FC = () => {
           <div className="text-[11px] font-bold text-[#4E6155] uppercase tracking-wider pb-1 border-b border-[#D8E2D5]">
             Government Navigation
           </div>
-          
+
           <button
             onClick={() => handleNavClick('home')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'home' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'home' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <span>🏠</span>
             <span>Home & Pothole Geospace Map</span>
@@ -320,9 +313,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleNavClick('how-it-works')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'how-it-works' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'how-it-works' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <FileQuestion className="w-4 h-4 text-emerald-800" />
             <span>How CivicSolve Works</span>
@@ -330,9 +322,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleNavClick('citizen-portal')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'citizen-portal' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'citizen-portal' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <span>🇮🇳</span>
             <span>Citizen Progress Tracker & Quality Feedback</span>
@@ -340,9 +331,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleRoleSelect('admin', 'admin-dashboard')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'admin-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'admin-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <Building2 className="w-4 h-4 text-[#143D2B]" />
             <span>Urban Local Body Admin Portal</span>
@@ -350,9 +340,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleRoleSelect('ngo', 'ngo-dashboard')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'ngo-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'ngo-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <span>🤝</span>
             <span>NGO & Grassroots Civil Society Portal</span>
@@ -360,9 +349,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleRoleSelect('university', 'university-workspace')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'university-workspace' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'university-workspace' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <GraduationCap className="w-4 h-4 text-purple-800" />
             <span>University & Academic Research Workspace</span>
@@ -370,9 +358,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleRoleSelect('industry', 'industry-dashboard')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'industry-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'industry-dashboard' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <span>🏭</span>
             <span>Industry, Startup & Corporate CSR Hub</span>
@@ -380,9 +367,8 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleNavClick('map')}
-            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${
-              currentView === 'map' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
-            }`}
+            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2 ${currentView === 'map' ? 'bg-[#143D2B] text-white' : 'text-[#2C3E33] hover:bg-[#E7EFE4]'
+              }`}
           >
             <MapPin className="w-4 h-4 text-emerald-700" />
             <span>Full Geospatial GIS Map</span>

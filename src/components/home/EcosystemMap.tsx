@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  User, 
-  Building2, 
-  GraduationCap, 
-  HeartHandshake, 
-  Rocket, 
-  CheckCircle2, 
-  ChevronRight 
+import {
+  User,
+  Building2,
+  GraduationCap,
+  HeartHandshake,
+  Rocket,
+  CheckCircle2,
+  ChevronRight
 } from 'lucide-react';
 import { useAppState } from '../../context/AppStateContext';
 
@@ -21,12 +21,12 @@ export const EcosystemMap: React.FC = () => {
       color: 'border-emerald-600/40 text-emerald-800 bg-emerald-50',
       tagline: 'Grassroots sensors reporting localized reality',
       capabilities: [
-        'Voice reporting in native vernacular languages (Hindi, Marathi, regional dialects)',
+        'Voice reporting in native vernacular languages (Hindi, Santali, Mundari, Nagpuri, English)',
         'Rich multi-modal evidence submission (photos, audio waveforms, video, documents)',
         'Real-time tracking of problem-to-solution milestones',
         'Post-intervention citizen satisfaction surveys and feedback'
       ],
-      partnerLink: 'Pune, Pimpri-Chinchwad, Wagholi, and rural blocks',
+      partnerLink: 'Ranchi, Jamshedpur, Dhanbad, Bokaro, and rural blocks',
       cta: 'Explore Citizen Reports',
       view: 'challenges'
     },
@@ -41,7 +41,7 @@ export const EcosystemMap: React.FC = () => {
         'Sponsor pilot deployments for high-performing HEI prototypes',
         'Executive GIS district heatmaps and state-wide impact analytics'
       ],
-      partnerLink: 'Pune Municipal Corp, PCMC, Maharashtra PWD, Smart Cities Mission',
+      partnerLink: 'Urban Dev & Housing Dept (UDHD Jharkhand), RMC Ranchi, JNAC, Jharkhand PWD',
       cta: 'Open Government Dashboard',
       view: 'government-dashboard'
     },
@@ -51,12 +51,12 @@ export const EcosystemMap: React.FC = () => {
       color: 'border-purple-600/30 text-purple-800 bg-purple-50',
       tagline: 'Multidisciplinary faculty, research labs & student innovators',
       capabilities: [
-        'Automated challenge-to-lab capability matching (e.g. COEP Tech 92% match)',
+        'Automated challenge-to-lab capability matching (e.g. BIT Mesra 92% match)',
         'Form multidisciplinary student teams (CS, Environmental, Civil, Electronics)',
         'Academic credit integration: Final-year capstones & applied research projects',
         'Fabricate prototypes in DST-funded incubators and campus labs'
       ],
-      partnerLink: 'COEP Tech, Pune University, MIT-WPU, PCCOE, VIT Pune',
+      partnerLink: 'BIT Mesra, NIT Jamshedpur, IIT (ISM) Dhanbad, Ranchi University, Birsa Agri Univ',
       cta: 'Open University Workspace',
       view: 'university-workspace'
     },
@@ -71,7 +71,7 @@ export const EcosystemMap: React.FC = () => {
         'Host field testing trials and coordinate community mobilization',
         'Participate in final resolution sign-off alongside ULB engineers'
       ],
-      partnerLink: 'Swachh Nagar Foundation, Janwani, Seva Sahayog, Local Resident Welfare Assns',
+      partnerLink: 'Vikas Bharti Bishunpur, RK Mission Morabadi, PRADAN, Local Resident Welfare Assns',
       cta: 'Open NGO Portal',
       view: 'ngo-dashboard'
     },
@@ -86,7 +86,7 @@ export const EcosystemMap: React.FC = () => {
         'CSR funding for high-impact social infrastructure pilots',
         'Hire student researchers demonstrated through solved challenges'
       ],
-      partnerLink: 'Chakan Automotive Hub, Pune Tech Incubators, CII Western Region',
+      partnerLink: 'Tata Steel CSR, Bokaro Steel (SAIL), Adityapur Industrial Cluster, Ranchi Startups',
       cta: 'Open Industry Portal',
       view: 'industry-dashboard'
     }
@@ -116,11 +116,10 @@ export const EcosystemMap: React.FC = () => {
               <button
                 key={key}
                 onClick={() => setSelectedNode(key)}
-                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
-                  isSelected
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${isSelected
                     ? 'bg-[#143D2B] text-white border-[#143D2B] shadow-sm'
                     : 'bg-white/80 border-[#CBD7C6] text-[#4E6155] hover:bg-white hover:text-[#143D2B]'
-                }`}
+                  }`}
               >
                 {item.icon}
                 <span>{item.title.split('&')[0]}</span>
@@ -132,7 +131,7 @@ export const EcosystemMap: React.FC = () => {
         {/* Detailed Node View */}
         <div className="bg-white rounded-2xl border border-[#CBD7C6] p-6 sm:p-8 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            
+
             <div className="md:col-span-8 space-y-4">
               <div className="flex items-center space-x-3">
                 <div className={`p-2.5 rounded-xl border ${nodes[selectedNode].color}`}>

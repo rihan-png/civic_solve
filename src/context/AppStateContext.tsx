@@ -1,21 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Challenge, IncidentCluster, UserRole, PlatformNotification, ChallengeCategory, CitizenFeedback } from '../types';
+import { Challenge, IncidentCluster, UserRole, PlatformNotification, ChallengeCategory, CitizenFeedback, ChallengeStatus } from '../types';
 import { MOCK_CHALLENGES, MOCK_INCIDENT_CLUSTERS, MOCK_NOTIFICATIONS } from '../data/mockData';
 
-export type AppView = 
-  | 'home' 
-  | 'challenges' 
-  | 'challenge-detail' 
+export type AppView =
+  | 'home'
+  | 'challenges'
+  | 'challenge-detail'
   | 'citizen-portal'
-  | 'map' 
-  | 'how-it-works' 
-  | 'ecosystem' 
-  | 'government-dashboard' 
-  | 'university-workspace' 
-  | 'ngo-dashboard' 
-  | 'industry-dashboard' 
-  | 'admin-dashboard' 
-  | 'impact' 
+  | 'map'
+  | 'how-it-works'
+  | 'ecosystem'
+  | 'government-dashboard'
+  | 'university-workspace'
+  | 'ngo-dashboard'
+  | 'industry-dashboard'
+  | 'admin-dashboard'
+  | 'impact'
   | 'demo';
 
 export interface UserSession {
@@ -64,15 +64,16 @@ interface AppStateContextType {
   filterCategory: string;
   setFilterCategory: (category: string) => void;
   submitNewChallenge: (newChallenge: Partial<Challenge>) => Challenge;
+  updateChallengeStatus: (challengeId: string, status: ChallengeStatus, squad?: string, note?: string) => void;
   verifyResolution: (challengeId: string, reviewerName: string, remarks: string) => void;
   acceptUniversityMatch: (challengeId: string, universityId: string) => void;
   submitCitizenFeedback: (
-    challengeId: string, 
-    feedback: { 
-      rating: number; 
-      satisfaction: 'Fully Resolved & Satisfactory' | 'Partially Resolved' | 'Unsatisfactory'; 
-      comment: string; 
-      postRepairPhotoUrl?: string; 
+    challengeId: string,
+    feedback: {
+      rating: number;
+      satisfaction: 'Fully Resolved & Satisfactory' | 'Partially Resolved' | 'Unsatisfactory';
+      comment: string;
+      postRepairPhotoUrl?: string;
     }
   ) => void;
 }
@@ -149,7 +150,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         email: customEmail || 'citizen@civicsolve.in',
         role: 'citizen',
         roleTitle: 'Verified Resident',
-        organization: 'Pimpri-Chinchwad Municipal Area',
+        organization: 'Ranchi Municipal Corporation, Ward 21 (Jharkhand)',
         badge: '🇮🇳 Citizen'
       };
       targetView = 'home';
@@ -274,6 +275,38 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return newChallenge;
   };
 
+  const updateChallengeStatus = (challengeId: string, status: ChallengeStatus, squad?: string, note?: string) => {
+    setChallenges(prev =>
+      prev.map(ch => {
+        if (ch.id === challengeId) {
+          return {
+            ...ch,
+            status,
+            routing: squad ? {
+              ...ch.routing,
+              primaryResolver: {
+                name: squad,
+                type: 'government'
+              }
+            } : ch.routing
+          };
+        }
+        return ch;
+      })
+    );
+
+    const newNotif: PlatformNotification = {
+      id: `notif-${Date.now()}`,
+      type: 'info',
+      title: `Status Updated: ${status.replace('_', ' ').toUpperCase()}`,
+      message: note || `Grievance ${challengeId} status updated to ${status}. Assigned squad: ${squad || 'Municipal Rapid Response Crew'}.`,
+      timestamp: 'Just now',
+      read: false,
+      challengeId
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+  };
+
   const verifyResolution = (challengeId: string, reviewerName: string, remarks: string) => {
     setChallenges(prev =>
       prev.map(ch => {
@@ -326,12 +359,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const submitCitizenFeedback = (
-    challengeId: string, 
-    feedback: { 
-      rating: number; 
-      satisfaction: 'Fully Resolved & Satisfactory' | 'Partially Resolved' | 'Unsatisfactory'; 
-      comment: string; 
-      postRepairPhotoUrl?: string; 
+    challengeId: string,
+    feedback: {
+      rating: number;
+      satisfaction: 'Fully Resolved & Satisfactory' | 'Partially Resolved' | 'Unsatisfactory';
+      comment: string;
+      postRepairPhotoUrl?: string;
     }
   ) => {
     setChallenges(prev =>
@@ -411,6 +444,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         filterCategory,
         setFilterCategory,
         submitNewChallenge,
+        updateChallengeStatus,
         verifyResolution,
         acceptUniversityMatch,
         submitCitizenFeedback

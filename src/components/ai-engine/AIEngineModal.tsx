@@ -7,9 +7,24 @@ import {
   ShieldCheck, 
   ArrowRight, 
   Clock,
-  Check
+  Check,
+  Zap,
+  Key,
+  ExternalLink,
+  Sparkles,
+  Send,
+  RefreshCw,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useAppState } from '../../context/AppStateContext';
+import {
+  triageGrievanceWithOpenRouter,
+  OPENROUTER_FREE_MODELS,
+  getStoredOpenRouterKey,
+  setStoredOpenRouterKey,
+  OpenRouterAnalysisResult
+} from '../../services/openrouterService';
 
 export const AIEngineModal: React.FC = () => {
   const { 
@@ -21,10 +36,46 @@ export const AIEngineModal: React.FC = () => {
     setCurrentView 
   } = useAppState();
 
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'verification' | 'clustering' | 'priority' | 'routing'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'verification' | 'clustering' | 'priority' | 'routing' | 'openrouter'>('pipeline');
   const [pipelineProgress, setPipelineProgress] = useState(1);
+  const [selectedModel, setSelectedModel] = useState<string>('google/gemini-2.0-flash-exp:free');
+  const [openRouterKey, setOpenRouterKey] = useState<string>(getStoredOpenRouterKey());
+  const [keySaved, setKeySaved] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [openRouterResult, setOpenRouterResult] = useState<OpenRouterAnalysisResult | null>(null);
+  const [showRawJson, setShowRawJson] = useState(false);
 
   const challenge = challenges.find(c => c.id === activeAIChallengeId) || challenges[0];
+
+  const handleSaveKey = () => {
+    setStoredOpenRouterKey(openRouterKey);
+    setKeySaved(true);
+    setTimeout(() => setKeySaved(false), 3000);
+  };
+
+  const handleRunOpenRouter = async () => {
+    setIsAnalyzing(true);
+    try {
+      const result = await triageGrievanceWithOpenRouter(
+        {
+          title: challenge.title,
+          description: challenge.description,
+          district: challenge.district,
+          villageOrWard: challenge.villageOrWard,
+          lat: challenge.coordinates.lat,
+          lng: challenge.coordinates.lng,
+          category: challenge.category
+        },
+        selectedModel,
+        openRouterKey
+      );
+      setOpenRouterResult(result);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   useEffect(() => {
     if (isAIEngineModalOpen) {
@@ -83,11 +134,17 @@ export const AIEngineModal: React.FC = () => {
             { id: 'verification', label: '2. Evidence Verification' },
             { id: 'clustering', label: '3. Incident Clustering' },
             { id: 'priority', label: '4. Explainable Priority' },
-            { id: 'routing', label: '5. Smart Resolver Routing' }
+            { id: 'routing', label: '5. Smart Resolver Routing' },
+            { id: 'openrouter', label: '⚡ OpenRouter Live AI (Free Models)' }
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => {
+                setActiveTab(tab.id as any);
+                if (tab.id === 'openrouter' && !openRouterResult) {
+                  handleRunOpenRouter();
+                }
+              }}
               className={`px-4 py-2.5 border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'border-cyan-400 text-cyan-300 bg-slate-900/60'
@@ -449,6 +506,225 @@ export const AIEngineModal: React.FC = () => {
                   </p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB 6: OpenRouter Live AI (Free Models) */}
+          {activeTab === 'openrouter' && (
+            <div className="space-y-5">
+              {/* Header Box */}
+              <div className="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                  <div className="flex items-center space-x-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white flex items-center space-x-2">
+                        <span>OpenRouter Free AI Triage Gateway</span>
+                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/40">
+                          100% Free API Tier Supported
+                        </span>
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        Query live foundation LLMs on OpenRouter to analyze Jharkhand civic hazards, assess multi-modal severity, and generate bilingual municipal work orders.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Model Selector & API Key Settings */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                  {/* Model Picker */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-300 flex items-center space-x-1">
+                      <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Select Free OpenRouter Model:</span>
+                    </label>
+                    <select
+                      value={selectedModel}
+                      onChange={(e) => setSelectedModel(e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400"
+                    >
+                      {OPENROUTER_FREE_MODELS.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.name} ({m.tag})
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-[10px] text-slate-500 block">
+                      Free tier models on OpenRouter with zero usage charges.
+                    </span>
+                  </div>
+
+                  {/* API Key Input */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-300 flex items-center space-x-1">
+                        <Key className="w-3.5 h-3.5 text-amber-400" />
+                        <span>OpenRouter API Key (Optional):</span>
+                      </label>
+                      <a
+                        href="https://openrouter.ai/keys"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[10px] text-cyan-400 hover:underline flex items-center space-x-0.5"
+                      >
+                        <span>Get Free Key</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="password"
+                        value={openRouterKey}
+                        onChange={(e) => setOpenRouterKey(e.target.value)}
+                        placeholder="sk-or-v1-... (leave empty for instant offline engine)"
+                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400 font-mono"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleSaveKey}
+                        className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors"
+                      >
+                        {keySaved ? 'Saved!' : 'Save'}
+                      </button>
+                    </div>
+                    <span className="text-[10px] text-slate-500 block">
+                      Stored locally in your browser. If empty, uses high-speed simulated free inference.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleRunOpenRouter}
+                    disabled={isAnalyzing}
+                    className="bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-500 hover:to-emerald-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg flex items-center space-x-2 shadow-lg shadow-emerald-900/30 cursor-pointer transition-all disabled:opacity-50"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Querying OpenRouter Free AI...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        <span>Run Live AI Triage ({selectedModel.split('/')[1]?.split(':')[0] || 'Free Model'})</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Analysis Result Box */}
+              {openRouterResult && (
+                <div className="bg-slate-950 border border-slate-800 p-5 rounded-xl space-y-4 animate-fadeIn">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs font-bold text-white uppercase tracking-wider">
+                        Live AI Triage Output
+                      </span>
+                      <span className="text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-700 px-2 py-0.5 rounded">
+                        Model: {openRouterResult.modelUsed}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center space-x-2 text-xs">
+                      <span className="text-slate-400 font-mono">⚡ {openRouterResult.latencyMs}ms</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        openRouterResult.urgencyLevel === 'CRITICAL' ? 'bg-rose-900/60 text-rose-300 border border-rose-700' :
+                        openRouterResult.urgencyLevel === 'HIGH' ? 'bg-amber-900/60 text-amber-300 border border-amber-700' :
+                        'bg-blue-900/60 text-blue-300 border border-blue-700'
+                      }`}>
+                        {openRouterResult.urgencyLevel} PRIORITY ({openRouterResult.confidenceScore}%)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Summary Card */}
+                  <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-cyan-400 tracking-wider">
+                      AI Executive Assessment
+                    </span>
+                    <p className="text-xs text-white font-medium leading-relaxed">
+                      {openRouterResult.summary}
+                    </p>
+                  </div>
+
+                  {/* Grid of Key AI Signals */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div className="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-semibold">Detected Language</span>
+                      <span className="font-bold text-slate-200 mt-0.5 block">{openRouterResult.detectedLanguage}</span>
+                    </div>
+                    <div className="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-semibold">Est. Impacted Population</span>
+                      <span className="font-bold text-amber-300 mt-0.5 block">~{openRouterResult.estimatedAffectedPeople.toLocaleString()} Citizens</span>
+                    </div>
+                    <div className="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block font-semibold">Recommended Dispatch Authority</span>
+                      <span className="font-bold text-emerald-300 mt-0.5 block truncate">{openRouterResult.recommendedDepartment}</span>
+                    </div>
+                  </div>
+
+                  {/* Safety Risks Identified */}
+                  <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                    <span className="text-[10px] uppercase font-bold text-rose-400 tracking-wider flex items-center space-x-1.5">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      <span>Identified Public Hazard Signals</span>
+                    </span>
+                    <ul className="space-y-1 text-xs text-slate-300">
+                      {openRouterResult.safetyRisks.map((risk, idx) => (
+                        <li key={idx} className="flex items-start space-x-2">
+                          <span className="text-rose-400 font-bold">•</span>
+                          <span>{risk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Bilingual Municipal Dispatch Directives */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className="bg-emerald-950/40 border border-emerald-800/80 p-3.5 rounded-xl space-y-1">
+                      <span className="text-[10px] uppercase font-bold text-emerald-300 tracking-wider flex items-center space-x-1">
+                        <span>🇮🇳 हिंदी निर्देश (Official Hindi Action Directive)</span>
+                      </span>
+                      <p className="text-xs text-emerald-100 font-medium leading-relaxed">
+                        {openRouterResult.actionItemsHindi}
+                      </p>
+                    </div>
+
+                    <div className="bg-blue-950/40 border border-blue-800/80 p-3.5 rounded-xl space-y-1">
+                      <span className="text-[10px] uppercase font-bold text-blue-300 tracking-wider flex items-center space-x-1">
+                        <span>🇬🇧 English Directive (Municipal Work Order)</span>
+                      </span>
+                      <p className="text-xs text-blue-100 font-medium leading-relaxed">
+                        {openRouterResult.actionItemsEnglish}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Developer Inspection Raw JSON */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowRawJson(!showRawJson)}
+                      className="text-[11px] text-slate-400 hover:text-white flex items-center space-x-1 cursor-pointer"
+                    >
+                      <span>{showRawJson ? 'Hide Raw AI JSON Response' : 'Inspect Raw AI JSON Response'}</span>
+                      {showRawJson ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                    </button>
+                    {showRawJson && (
+                      <pre className="mt-2 bg-slate-900 border border-slate-800 p-3 rounded-lg text-[10px] font-mono text-cyan-300 overflow-x-auto max-h-48">
+                        {JSON.stringify(openRouterResult, null, 2)}
+                      </pre>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
